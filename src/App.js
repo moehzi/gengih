@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const giphy_secret_key = process.env.REACT_APP_GIPHY_KEY;
+  console.log(giphy_secret_key);
   return (
     <div className="App">
       <header className="App-header">
@@ -15,7 +17,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          {giphy_secret_key}
         </a>
       </header>
     </div>
