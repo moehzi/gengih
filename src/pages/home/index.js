@@ -1,14 +1,16 @@
+import ButtonSearch from '../../components/ButtonSearch';
+import GIFImage from '../../components/GIFImage';
+import Input from '../../components/Input';
+import gif from '../../data/gif';
+
 export const Home = () => {
+  const { title, url } = gif;
+
   return (
     <div>
-      <input /> <button>Search</button>
-      <div>
-        <img
-          src="https://media.giphy.com/media/Vh8pbGX3SGRwFDh3V0/source.gif
-"
-          alt="foto-aja"
-        />
-      </div>
+      <Input />
+      <ButtonSearch />
+      <GIFImage title={title} image={url} />
     </div>
   );
 };
