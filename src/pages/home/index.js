@@ -1,16 +1,22 @@
 import ButtonSearch from '../../components/ButtonSearch';
 import GIFImage from '../../components/GIFImage';
 import Input from '../../components/Input';
-import gif from '../../data/gif';
+import gifs from '../../data/gifs';
 
 export const Home = () => {
-  const { title, url } = gif;
+  const renderGifs = () => {
+    return gifs
+      .filter((gif) => gif.rating === 'g')
+      .map((filteredGif) => {
+        return <GIFImage title={filteredGif.title} image={filteredGif.url} />;
+      });
+  };
 
   return (
     <div>
       <Input />
       <ButtonSearch />
-      <GIFImage title={title} image={url} />
+      {renderGifs()}
     </div>
   );
 };
