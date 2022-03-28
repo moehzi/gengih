@@ -5,12 +5,17 @@ export const ButtonSelect = ({ url }) => {
     <button
       style={{
         padding: '12px 32px',
-        borderRadius: '4px',
+        borderRadius: '0.5rem',
         fontSize: '16px',
-        backgroundColor: '#3DB7E4',
+        backgroundColor: '#F0A500',
+        outline: 'none',
+        cursor: 'pointer',
       }}
     >
-      <a href={url} style={{ color: 'white', textDecoration: 'none' }}>
+      <a
+        href={url}
+        style={{ color: 'black', fontWeight: 'bold', textDecoration: 'none' }}
+      >
         Select
       </a>
     </button>
