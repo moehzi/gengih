@@ -23,22 +23,22 @@ const AuthButton = () => {
 
   return (
     <div>
-      <button
-        style={{
-          padding: '1rem 4rem',
-          fontSize: '1.5rem',
-          backgroundColor: '#F0A500',
-          outline: 'none',
-          cursor: 'pointer',
-        }}
+      <a
+        href={SPOTIFY_AUTH_URL}
+        style={{ textDecoration: 'none', color: 'black', fontWeight: 'bold' }}
       >
-        <a
-          href={SPOTIFY_AUTH_URL}
-          style={{ textDecoration: 'none', color: 'black', fontWeight: 'bold' }}
+        <button
+          style={{
+            padding: '1rem 4rem',
+            fontSize: '1.5rem',
+            backgroundColor: '#F0A500',
+            outline: 'none',
+            cursor: 'pointer',
+          }}
         >
           Get my access token
-        </a>
-      </button>
+        </button>
+      </a>
     </div>
   );
 };

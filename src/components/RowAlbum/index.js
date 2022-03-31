@@ -4,7 +4,7 @@ import { SongArtist } from './SongArtist';
 import { SongImage } from './SongImage';
 import { SongTitle } from './SongTitle';
 
-const RowAlbum = ({ image, title, artist, url }) => {
+const RowAlbum = ({ image, title, artist, url, onClick, isSelected, id }) => {
   return (
     <div
       style={{
@@ -18,7 +18,12 @@ const RowAlbum = ({ image, title, artist, url }) => {
       <div style={{ color: '#1B1A17' }}>
         <SongTitle title={title} />
         <SongArtist artist={artist} />
-        <ButtonSelect url={url} />
+        <ButtonSelect
+          url={url}
+          onClick={onClick}
+          isSelected={isSelected}
+          id={id}
+        />
       </div>
     </div>
   );

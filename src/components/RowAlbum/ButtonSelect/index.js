@@ -1,6 +1,7 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 
-export const ButtonSelect = ({ url }) => {
+export const ButtonSelect = ({ url, isSelected, onClick, id }) => {
   return (
     <button
       style={{
@@ -11,13 +12,10 @@ export const ButtonSelect = ({ url }) => {
         outline: 'none',
         cursor: 'pointer',
       }}
+      onClick={onClick}
+      id={id}
     >
-      <a
-        href={url}
-        style={{ color: 'black', fontWeight: 'bold', textDecoration: 'none' }}
-      >
-        Select
-      </a>
+      {isSelected ? 'Deselect' : 'Select'}
     </button>
   );
 };
