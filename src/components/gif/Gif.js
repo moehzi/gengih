@@ -2,9 +2,9 @@ import React from 'react';
 
 const Gif = ({ url, title }) => {
   return (
-    <div>
+    <div style={{ maxWidth: '250px' }}>
       <p>{title}</p>
-      <img src={url} alt="foto-aja" />
+      <img width="200" height="200" src={url} alt="foto-aja" />
     </div>
   );
 };

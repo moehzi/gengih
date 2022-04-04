@@ -3,18 +3,22 @@ import axios from 'axios';
 import Gif from '../../components/GIF/Gif';
 import Button from '../../components/Button/index';
 import Input from '../../components/Input/index';
+import { useDispatch, useSelector } from 'react-redux';
+import { setText } from '../../store/searchSlice';
 
 const SearchBar = () => {
-  const [text, setText] = useState('');
+  const text = useSelector((state) => state.inputVal.value);
   const [giphys, setGiphys] = useState([]);
 
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
-    setText(e.target.value);
+    dispatch(setText(e.target.value));
   };
 
   const getGiphy = async () => {
     const response = await axios.get(
-      `https://api.giphy.com/v1/gifs/search?api_key=${process.env.REACT_APP_GIPHY_KEY}&q=${text}&limit=12`
+      `https://api.giphy.com/v1/gifs/search?api_key=${process.env.REACT_APP_GIPHY_KEY}&q=${text}&limit=20`
     );
     return response.data;
   };
@@ -44,10 +48,12 @@ const SearchBar = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{ padding: '1rem' }}>
       <Input handleChange={handleChange} />
       <Button handleClick={handleClick} />
-      {renderGif()}
+      <div style={{ display: 'flex ', flexWrap: 'wrap', gap: '1rem' }}>
+        {renderGif()}
+      </div>
     </div>
   );
 };
