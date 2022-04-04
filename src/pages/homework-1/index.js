@@ -10,8 +10,11 @@ import {
   getCurrentProfile,
 } from '../../services/spotify';
 import FormPlaylist from '../../components/FormPlaylist';
+import { useDispatch, useSelector } from 'react-redux';
+import { setToken } from '../../store/authSlice';
 
 export const HomeworkOne = () => {
+  const dispatch = useDispatch();
   const [user, setUser] = useState('');
   const [valInput, setValInput] = useState({
     title: '',
@@ -22,6 +25,7 @@ export const HomeworkOne = () => {
   const [isUpdated, setIsUpdated] = useState(false);
   const [tempArr, setTempArr] = useState([]);
   const [selectedTracks, setSelectedTracks] = useState([]);
+  const token = useSelector((state) => state.token?.value);
 
   const access_token = new URLSearchParams(window.location.hash).get(
     '#access_token'
@@ -122,23 +126,19 @@ export const HomeworkOne = () => {
     });
   };
 
-  const [token, setToken] = useState('');
-
   useEffect(() => {
-    setToken(access_token);
+    dispatch(setToken(access_token));
     if (access_token) {
       getCurrentProfile(access_token).then((res) => {
         setUser(res.id);
       });
     }
-  }, [access_token]);
+  }, [dispatch, access_token]);
 
   useEffect(() => {
     renderRow();
     setIsUpdated(false);
   }, [isUpdated]);
-
-  useEffect(() => {});
 
   const getSongList = async () => {
     await axios
