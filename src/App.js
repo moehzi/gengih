@@ -1,3 +1,12 @@
-export default function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+import logo from './logo.svg';
+import './App.css';
+import SearchBar from './pages/Search';
+
+function App() {
+  return (
+    <div className="App">
+      <SearchBar />
+    </div>
+  );
+
 }
