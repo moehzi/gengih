@@ -1,12 +1,22 @@
 import './App.css';
-import { HomeworkOne } from './pages/homework-1';
+import SearchBar from './pages/Search';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Trending from './pages/Trending';
 
 function App() {
   return (
-    <div>
-      <HomeworkOne />
-    </div>
-  );
+    <Router>
+      <Switch>
+        <div className="App">
+          <Route exact path="/">
+            <SearchBar />
+          </Route>
+          <Route path="/trending">
+            <Trending />
+          </Route>
+        </div>
+      </Switch>
+    </Router>
 }
 
 export default App;
