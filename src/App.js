@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import SearchBar from './pages/Search';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -18,7 +17,6 @@ function App() {
         </div>
       </Switch>
     </Router>
-  );
 }
 
 export default App;
