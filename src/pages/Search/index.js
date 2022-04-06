@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Gif from '../../components/GIF/Gif';
+import Gif from '../../components/gif/Gif';
 import Button from '../../components/Button/index';
 import Input from '../../components/Input/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { setText } from '../../store/searchSlice';
+import { Link } from 'react-router-dom';
+import { getGiphy } from '../../services/gifService';
 
 const SearchBar = () => {
   const text = useSelector((state) => state.inputVal.value);
@@ -14,13 +15,6 @@ const SearchBar = () => {
 
   const handleChange = (e) => {
     dispatch(setText(e.target.value));
-  };
-
-  const getGiphy = async () => {
-    const response = await axios.get(
-      `https://api.giphy.com/v1/gifs/search?api_key=${process.env.REACT_APP_GIPHY_KEY}&q=${text}&limit=20`
-    );
-    return response.data;
   };
 
   const renderGif = () => {
@@ -36,23 +30,39 @@ const SearchBar = () => {
   };
 
   const handleClick = () => {
-    getGiphy().then((data) => {
+    getGiphy(text).then((data) => {
       setGiphys(data.data);
     });
   };
 
   useEffect(() => {
-    getGiphy().then((data) => {
+    getGiphy(text).then((data) => {
       setGiphys(data.data);
     });
   }, []);
 
   return (
-    <div style={{ padding: '1rem' }}>
+    <div
+      style={{
+        padding: '1rem',
+      }}
+    >
+      <Link to="/trending">
+        <h3>See what's trending now</h3>
+      </Link>
       <Input handleChange={handleChange} />
       <Button handleClick={handleClick} />
-      <div style={{ display: 'flex ', flexWrap: 'wrap', gap: '1rem' }}>
-        {renderGif()}
+      <div style={{ width: '90%', margin: '0 auto' }}>
+        <div
+          style={{
+            display: 'flex ',
+            flexWrap: 'wrap',
+            gap: '2rem',
+            textAlign: 'center',
+          }}
+        >
+          {renderGif()}
+        </div>
       </div>
     </div>
   );
