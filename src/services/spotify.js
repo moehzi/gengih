@@ -34,3 +34,15 @@ export const addItemToPlaylist = async (playlistId, token, uris) => {
     }
   );
 };
+
+export const getSongList = async (token, valInput) => {
+  const response = await axios.get(
+    `https://api.spotify.com/v1/search?q=${valInput}&limit=20&type=track`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};

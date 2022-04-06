@@ -2,20 +2,21 @@
 import RowAlbum from '../../components/RowAlbum';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import NotAuthView from '../../components/NotAuth';
 import AuthView from '../../components/AuthView';
 import {
   addItemToPlaylist,
   createPlaylist,
   getCurrentProfile,
+  getSongList,
 } from '../../services/spotify';
 import FormPlaylist from '../../components/FormPlaylist';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../store/authSlice';
+import { Redirect } from 'react-router-dom';
 
-export const HomeworkOne = () => {
+export const CreatePlaylist = () => {
   const dispatch = useDispatch();
-  const [user, setUser] = useState('');
+  const [user, setUser] = useState([]);
   const [valInput, setValInput] = useState({
     title: '',
     description: '',
@@ -26,10 +27,6 @@ export const HomeworkOne = () => {
   const [tempArr, setTempArr] = useState([]);
   const [selectedTracks, setSelectedTracks] = useState([]);
   const token = useSelector((state) => state.token?.value);
-
-  const access_token = new URLSearchParams(window.location.hash).get(
-    '#access_token'
-  );
 
   const handleClick = (e) => {
     const findIndex = tracks.findIndex((track) => track.uri === e.target.id);
@@ -56,7 +53,7 @@ export const HomeworkOne = () => {
       public: false,
     };
 
-    createPlaylist(user, token, payload).then((res) => {
+    createPlaylist(user.id, token, payload).then((res) => {
       console.log(res.data.id);
       setValInput({ ...valInput, title: ' ', description: ' ' });
       const tempUri = tempArr.map((track) => track.uri);
@@ -66,6 +63,10 @@ export const HomeworkOne = () => {
         setTempArr([]);
       });
     });
+  };
+
+  const handleLogout = (e) => {
+    dispatch(setToken(''));
   };
 
   const handleClickSelected = (e) => {
@@ -127,42 +128,30 @@ export const HomeworkOne = () => {
   };
 
   useEffect(() => {
-    dispatch(setToken(access_token));
-    if (access_token) {
-      getCurrentProfile(access_token).then((res) => {
-        setUser(res.id);
+    if (token) {
+      getCurrentProfile(token).then((res) => {
+        setUser(res);
+        console.log(res);
       });
     }
-  }, [dispatch, access_token]);
+  }, []);
 
   useEffect(() => {
     renderRow();
     setIsUpdated(false);
   }, [isUpdated]);
 
-  const getSongList = async () => {
-    await axios
-      .get(
-        `https://api.spotify.com/v1/search?q=${valInput.searchInput}&limit=20&type=track`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+  const handleSubmit = () => {
+    setSelectedTracks([...new Set(tempArr)]);
+    getSongList(token, valInput.searchInput)
       .then((res) => {
-        const data = res.data.tracks.items;
+        const data = res.tracks.items;
         const newArr = data.map((v) => {
           return { ...v, isSelected: false };
         });
         setTracks(newArr);
       })
       .catch((error) => console.log(error));
-  };
-
-  const handleSubmit = () => {
-    setSelectedTracks([...new Set(tempArr)]);
-    getSongList();
   };
 
   const handleChange = (e) => {
@@ -184,9 +173,14 @@ export const HomeworkOne = () => {
         }}
       >
         {token ? (
-          <AuthView handleChange={handleChange} handleSubmit={handleSubmit} />
+          <AuthView
+            user={user.display_name}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            handleLogout={handleLogout}
+          />
         ) : (
-          <NotAuthView />
+          <Redirect to="/" />
         )}
         {(tempArr.length > 0 || selectedTracks.length > 0) && (
           <>
