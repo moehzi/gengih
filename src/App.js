@@ -1,4 +1,3 @@
-import './App.css';
 import { CreatePlaylist } from './pages/create-playlist';
 import { Homepage } from './pages/home';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
