@@ -1,7 +1,5 @@
-/* eslint-disable no-undef */
-import RowAlbum from '../../components/RowAlbum';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import RowAlbum from '../../components/RowAlbum';
 import AuthView from '../../components/AuthView';
 import {
   addItemToPlaylist,
@@ -13,6 +11,8 @@ import FormPlaylist from '../../components/FormPlaylist';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../store/authSlice';
 import { Redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Toast from '../../components/ToastContainer';
 
 export const CreatePlaylist = () => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ export const CreatePlaylist = () => {
   });
   const [tracks, setTracks] = useState([]);
   const [isUpdated, setIsUpdated] = useState(false);
-  const [tempArr, setTempArr] = useState([]);
+  const [tempSelectedTracks, setTempSelectedTracks] = useState([]);
   const [selectedTracks, setSelectedTracks] = useState([]);
   const token = useSelector((state) => state.token?.value);
 
@@ -36,17 +36,20 @@ export const CreatePlaylist = () => {
         return ele !== value;
       });
     };
-    const removeTemp = removeItem(tempArr, tracks[findIndex]);
-    // eslint-disable-next-line no-unused-expressions
+
+    const removeTemp = removeItem(tempSelectedTracks, tracks[findIndex]);
     tracks[findIndex].isSelected === false
-      ? ((tracks[findIndex].isSelected = true), tempArr.push(tracks[findIndex]))
-      : ((tracks[findIndex].isSelected = false), setTempArr([...removeTemp]));
+      ? ((tracks[findIndex].isSelected = true),
+        tempSelectedTracks.push(tracks[findIndex]))
+      : ((tracks[findIndex].isSelected = false),
+        setTempSelectedTracks([...removeTemp]));
 
     setIsUpdated(true);
   };
 
   const handleSubmitPlaylist = (e) => {
     e.preventDefault();
+
     const payload = {
       name: valInput.title,
       description: valInput.description,
@@ -54,18 +57,29 @@ export const CreatePlaylist = () => {
     };
 
     createPlaylist(user.id, token, payload).then((res) => {
-      console.log(res.data.id);
       setValInput({ ...valInput, title: ' ', description: ' ' });
-      const tempUri = tempArr.map((track) => track.uri);
-      addItemToPlaylist(res.data.id, token, tempUri.join(',')).then((res) => {
+
+      const tempUri = tempSelectedTracks.map((track) => track.uri);
+
+      addItemToPlaylist(res.data.id, token, tempUri.join(',')).then(() => {
         setTracks([]);
         setSelectedTracks([]);
-        setTempArr([]);
+        setTempSelectedTracks([]);
+        toast.success('Berhasil membuat playlist!', {
+          position: 'top-center',
+          autoClose: 1000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
     });
   };
 
   const handleLogout = (e) => {
+    e.preventDefault();
     dispatch(setToken(''));
   };
 
@@ -73,6 +87,7 @@ export const CreatePlaylist = () => {
     const findIndex = selectedTracks.findIndex(
       (track) => track.uri === e.target.id
     );
+
     const removeItem = (arr, value) => {
       return arr.filter((ele) => {
         return ele !== value;
@@ -84,9 +99,14 @@ export const CreatePlaylist = () => {
       selectedTracks,
       selectedTracks[findIndex]
     );
-    const removeTemp = removeItem(tempArr, selectedTracks[findIndex]);
+
+    const removeTemp = removeItem(
+      tempSelectedTracks,
+      selectedTracks[findIndex]
+    );
+
     setSelectedTracks([...removeSelected]);
-    setTempArr([...removeTemp]);
+    setTempSelectedTracks([...removeTemp]);
   };
 
   const renderRow = () => {
@@ -111,7 +131,7 @@ export const CreatePlaylist = () => {
   };
 
   const renderSelectedRow = () => {
-    return selectedTracks.map((album, index) => {
+    return selectedTracks.map((album) => {
       return (
         <RowAlbum
           onClick={handleClickSelected}
@@ -131,7 +151,6 @@ export const CreatePlaylist = () => {
     if (token) {
       getCurrentProfile(token).then((res) => {
         setUser(res);
-        console.log(res);
       });
     }
   }, []);
@@ -142,10 +161,12 @@ export const CreatePlaylist = () => {
   }, [isUpdated]);
 
   const handleSubmit = () => {
-    setSelectedTracks([...new Set(tempArr)]);
+    setSelectedTracks([...new Set(tempSelectedTracks)]);
+
     getSongList(token, valInput.searchInput)
       .then((res) => {
         const data = res.tracks.items;
+
         const newArr = data.map((v) => {
           return { ...v, isSelected: false };
         });
@@ -156,6 +177,7 @@ export const CreatePlaylist = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setValInput({
       ...valInput,
       [name]: value,
@@ -182,7 +204,7 @@ export const CreatePlaylist = () => {
         ) : (
           <Redirect to="/" />
         )}
-        {(tempArr.length > 0 || selectedTracks.length > 0) && (
+        {(tempSelectedTracks.length > 0 || selectedTracks.length > 0) && (
           <>
             <FormPlaylist
               title={valInput.title}
@@ -199,6 +221,7 @@ export const CreatePlaylist = () => {
             {renderRow()}
           </>
         )}
+        <Toast />
       </div>
     </div>
   );

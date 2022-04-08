@@ -1,7 +1,6 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 
-export const ButtonSelect = ({ url, isSelected, onClick, id }) => {
+export const ButtonSelect = ({ isSelected, onClick, id }) => {
   return (
     <button
       style={{
