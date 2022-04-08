@@ -3,6 +3,6 @@ import inputValReducer from './searchSlice';
 
 export const store = configureStore({
   reducer: {
-    inputVal: inputValReducer,
+    inputValue: inputValReducer,
   },
 });

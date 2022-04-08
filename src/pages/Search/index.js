@@ -8,7 +8,8 @@ import { Link } from 'react-router-dom';
 import { getGiphy } from '../../services/gifService';
 
 const SearchBar = () => {
-  const text = useSelector((state) => state.inputVal.value);
+  const searchQuery = useSelector((state) => state.inputValue.value);
+
   const [giphys, setGiphys] = useState([]);
 
   const dispatch = useDispatch();
@@ -30,13 +31,13 @@ const SearchBar = () => {
   };
 
   const handleClick = () => {
-    getGiphy(text).then((data) => {
+    getGiphy(searchQuery).then((data) => {
       setGiphys(data.data);
     });
   };
 
   useEffect(() => {
-    getGiphy(text).then((data) => {
+    getGiphy(searchQuery).then((data) => {
       setGiphys(data.data);
     });
   }, []);
@@ -48,7 +49,7 @@ const SearchBar = () => {
       }}
     >
       <Link to="/trending">
-        <h3>See what's trending now</h3>
+        <h3>See what is trending now</h3>
       </Link>
       <Input handleChange={handleChange} />
       <Button handleClick={handleClick} />
