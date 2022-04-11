@@ -27,6 +27,24 @@ export const Homepage = () => {
   }, [dispatch]);
 
   return (
-    <div>{token ? <Redirect to="create-playlist" /> : <NotAuthView />}</div>
+    <div
+      style={{
+        backgroundColor: '#060606',
+        position: 'relative',
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: '#060606',
+          color: 'black',
+          opacity: '35%',
+          width: '100%',
+          zIndex: '50',
+          minHeight: '100vh',
+          position: 'absolute',
+        }}
+      />
+      {token ? <Redirect to="create-playlist" /> : <NotAuthView />}
+    </div>
   );
 };

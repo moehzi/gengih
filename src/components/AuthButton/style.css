@@ -1,0 +1,28 @@
+.btn {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem 1.5rem;
+	font-size: 1.25rem;
+	background-color: #70C498;
+	outline: none;
+	cursor: pointer;
+	border: none;
+	border-radius: 1rem;
+	font-weight: 600;
+	color: white;
+	transition: 0.1s all ease-in;
+}
+
+.btn:hover {
+	color: #70C498;
+	background-color: white;
+	transition: 0.1s all ease-out;
+}
+
+@media only screen and (max-width: 576px) {
+	.btn {
+		padding: 0.25rem 0.5rem;
+		font-size: 1rem;
+	}
+}
