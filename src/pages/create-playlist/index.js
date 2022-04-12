@@ -13,6 +13,7 @@ import { setToken } from '../../store/authSlice';
 import { Redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Toast from '../../components/ToastContainer';
+import './style.css';
 
 export const CreatePlaylist = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,6 @@ export const CreatePlaylist = () => {
   });
   const [tracks, setTracks] = useState([]);
   const [isUpdated, setIsUpdated] = useState(false);
-  const [tempSelectedTracks, setTempSelectedTracks] = useState([]);
   const [selectedTracks, setSelectedTracks] = useState([]);
   const token = useSelector((state) => state.token?.value);
 
@@ -37,12 +37,12 @@ export const CreatePlaylist = () => {
       });
     };
 
-    const removeTemp = removeItem(tempSelectedTracks, tracks[findIndex]);
+    const removeTemp = removeItem(selectedTracks, tracks[findIndex]);
     tracks[findIndex].isSelected === false
       ? ((tracks[findIndex].isSelected = true),
-        tempSelectedTracks.push(tracks[findIndex]))
+        selectedTracks.push(tracks[findIndex]))
       : ((tracks[findIndex].isSelected = false),
-        setTempSelectedTracks([...removeTemp]));
+        setSelectedTracks([...removeTemp]));
 
     setIsUpdated(true);
   };
@@ -59,12 +59,16 @@ export const CreatePlaylist = () => {
     createPlaylist(user.id, token, payload).then((res) => {
       setValInput({ ...valInput, title: ' ', description: ' ' });
 
-      const tempUri = tempSelectedTracks.map((track) => track.uri);
+      const tempUri = selectedTracks.map((track) => track.uri);
 
       addItemToPlaylist(res.data.id, token, tempUri.join(',')).then(() => {
         setTracks([]);
         setSelectedTracks([]);
-        setTempSelectedTracks([]);
+        setValInput({
+          title: '',
+          description: '',
+          searchInput: '',
+        });
         toast.success('Berhasil membuat playlist!', {
           position: 'top-center',
           autoClose: 1000,
@@ -100,13 +104,7 @@ export const CreatePlaylist = () => {
       selectedTracks[findIndex]
     );
 
-    const removeTemp = removeItem(
-      tempSelectedTracks,
-      selectedTracks[findIndex]
-    );
-
     setSelectedTracks([...removeSelected]);
-    setTempSelectedTracks([...removeTemp]);
   };
 
   const renderRow = () => {
@@ -161,8 +159,6 @@ export const CreatePlaylist = () => {
   }, [isUpdated]);
 
   const handleSubmit = () => {
-    setSelectedTracks([...new Set(tempSelectedTracks)]);
-
     getSongList(token, valInput.searchInput)
       .then((res) => {
         const data = res.tracks.items;
@@ -185,7 +181,14 @@ export const CreatePlaylist = () => {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        backgroundColor: '#060606',
+        color: 'white',
+        minHeight: '100vh',
+        padding: '4rem 0',
+      }}
+    >
       <div
         style={{
           padding: '0 4rem',
@@ -200,27 +203,40 @@ export const CreatePlaylist = () => {
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             handleLogout={handleLogout}
+            searchInput={valInput.searchInput}
           />
         ) : (
           <Redirect to="/" />
         )}
-        {(tempSelectedTracks.length > 0 || selectedTracks.length > 0) && (
-          <>
-            <FormPlaylist
-              title={valInput.title}
-              description={valInput.description}
-              handleChange={handleChange}
-              handleSubmitPlaylist={handleSubmitPlaylist}
-            />
-          </>
-        )}
-        {selectedTracks && renderSelectedRow()}
-        {tracks.length > 0 && (
-          <>
-            <h1>List of tracks</h1>
-            {renderRow()}
-          </>
-        )}
+        <div className={selectedTracks.length > 0 && 'content-wrapper'}>
+          {selectedTracks.length > 0 && (
+            <div>
+              <FormPlaylist
+                title={valInput.title}
+                description={valInput.description}
+                handleChange={handleChange}
+                handleSubmitPlaylist={handleSubmitPlaylist}
+              />
+              <h1 style={{ margin: '1rem 0' }}>Selected tracks</h1>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                }}
+              >
+                {renderSelectedRow()}
+              </div>
+            </div>
+          )}
+
+          {tracks.length > 0 && (
+            <div>
+              <h1 style={{ marginBottom: '1rem' }}>List of tracks</h1>
+              <div className="row">{renderRow()}</div>
+            </div>
+          )}
+        </div>
         <Toast />
       </div>
     </div>

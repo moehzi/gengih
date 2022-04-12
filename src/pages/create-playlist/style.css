@@ -1,0 +1,11 @@
+.row {
+	display: grid;
+	grid-gap: 1rem;
+	grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+}
+
+.content-wrapper {
+	display: grid;
+	grid-template-columns: minmax(150px, 25%) 1fr;
+	grid-gap: 2rem;
+}

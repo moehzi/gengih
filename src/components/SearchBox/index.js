@@ -1,34 +1,31 @@
 import React from 'react';
+import './style.css';
 
-const SearchBox = ({ handleChange, handleSubmit }) => {
+const SearchBox = ({ handleChange, handleSubmit, searchInput }) => {
   return (
-    <div
-      style={{
-        padding: '1rem',
-        width: '100%',
-        textAlign: 'center',
-      }}
-    >
-      <input
-        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-        name="searchInput"
-        onChange={handleChange}
-        placeholder="Masukkan track yang ingin anda cari"
-        style={{ padding: '0.5rem 1rem', width: '80%', fontSize: '1rem' }}
-      />
+    <div className="search-wrapper" style={{}}>
       <button
         onClick={handleSubmit}
         style={{
-          padding: '0.55rem 2rem',
           fontSize: '16px',
-          backgroundColor: '#F0A500',
+          backgroundColor: '#252836',
           outline: 'none',
           cursor: 'pointer',
           fontWeight: 'bold',
+          border: 'none',
+          marginRight: '.5rem',
         }}
       >
-        Search
+        <img src="/icons/search.svg" />
       </button>
+      <input
+        className="input-search"
+        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+        name="searchInput"
+        value={searchInput}
+        onChange={handleChange}
+        placeholder="Masukkan track yang ingin anda cari"
+      />
     </div>
   );
 };

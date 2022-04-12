@@ -6,10 +6,10 @@ export const SongImage = ({ image }) => {
       src={image}
       alt=""
       style={{
-        marginRight: '2rem',
+        marginRight: '1rem',
         borderRadius: '1rem 0 0 1rem',
-        width: '200px',
-        height: '200px',
+        width: '180px',
+        height: '180px',
       }}
     />
   );

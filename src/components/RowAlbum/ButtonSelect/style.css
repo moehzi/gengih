@@ -1,0 +1,13 @@
+.btn-select {
+	padding: 0.5rem 1.25rem;
+	border-radius: 0.5rem;
+	font-size: 12px;
+	outline: none;
+	cursor: pointer;
+	border: none;
+	color: white;
+}
+
+.btn-select:hover {
+	opacity: 90%;
+}
