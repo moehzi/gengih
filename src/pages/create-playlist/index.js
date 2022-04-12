@@ -132,6 +132,8 @@ export const CreatePlaylist = () => {
     return selectedTracks.map((album) => {
       return (
         <RowAlbum
+          width="100px"
+          height="100px"
           onClick={handleClickSelected}
           isSelected={album.isSelected}
           image={album.album.images[1].url}
@@ -191,7 +193,8 @@ export const CreatePlaylist = () => {
     >
       <div
         style={{
-          padding: '0 4rem',
+          width: '90%',
+          margin: '0 auto',
           display: 'flex',
           flexDirection: 'column',
           gap: '2rem',

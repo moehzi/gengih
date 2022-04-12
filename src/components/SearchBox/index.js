@@ -3,7 +3,7 @@ import './style.css';
 
 const SearchBox = ({ handleChange, handleSubmit, searchInput }) => {
   return (
-    <div className="search-wrapper" style={{}}>
+    <div className="search-wrapper">
       <button
         onClick={handleSubmit}
         style={{

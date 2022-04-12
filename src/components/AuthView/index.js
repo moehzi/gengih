@@ -11,12 +11,7 @@ const AuthView = ({
 }) => {
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
+      <div className="search-container">
         <h1 style={{ textAlign: 'center', flex: '1' }}>
           Hello {user}, temukan lagu kesukaanmu disini!
         </h1>

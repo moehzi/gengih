@@ -13,3 +13,18 @@
 .btn-logout:hover {
 	opacity: 90%;
 }
+
+.search-container {
+	display: flex;
+	align-items: center;
+}
+
+@media only screen and (max-width: 560px) {
+	.search-container {
+		flex-direction: column;
+	}
+
+	.search-container button {
+		margin-top: 1rem;
+	}
+}
