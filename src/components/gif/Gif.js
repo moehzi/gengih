@@ -1,18 +1,30 @@
-import React from 'react';
+import * as React from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
 
-const Gif = ({ url, title }) => {
+export default function Gif({ url, title }) {
   return (
-    <div style={{ marginTop: '2rem' }}>
-      <img
-        style={{ borderRadius: '1rem' }}
-        width="200"
-        height="200"
-        src={url}
-        alt="foto-aja"
-      />
-      <p style={{ maxWidth: '200px', margin: '0 auto' }}>{title}</p>
-    </div>
+    <Card
+      sx={{
+        maxWidth: 345,
+        marginTop: '4rem',
+        backgroundColor: '#252836',
+        borderRadius: '.5rem',
+      }}
+    >
+      <CardMedia component="img" height="200" image={url} alt="green iguana" />
+      <CardContent>
+        <Typography
+          gutterBottom
+          variant="h6"
+          component="div"
+          sx={{ color: 'white' }}
+        >
+          {title}
+        </Typography>
+      </CardContent>
+    </Card>
   );
-};
-
-export default Gif;
+}
