@@ -11,11 +11,12 @@ import FormPlaylist from '../../components/FormPlaylist';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../store/authSlice';
 import { Redirect } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import Toast from '../../components/ToastContainer';
+import { errorToast, successToast } from '../../helper/toast';
 import './style.css';
+import { Text, useToast } from '@chakra-ui/react';
 
 export const CreatePlaylist = () => {
+  const toast = useToast();
   const dispatch = useDispatch();
   const [user, setUser] = useState([]);
   const [valInput, setValInput] = useState({
@@ -56,30 +57,31 @@ export const CreatePlaylist = () => {
       public: false,
     };
 
-    createPlaylist(user.id, token, payload).then((res) => {
-      setValInput({ ...valInput, title: ' ', description: ' ' });
+    createPlaylist(user.id, token, payload)
+      .then((res) => {
+        setValInput({ ...valInput, title: ' ', description: ' ' });
 
-      const tempUri = selectedTracks.map((track) => track.uri);
+        const tempUri = selectedTracks.map((track) => track.uri);
 
-      addItemToPlaylist(res.data.id, token, tempUri.join(',')).then(() => {
-        setTracks([]);
-        setSelectedTracks([]);
-        setValInput({
-          title: '',
-          description: '',
-          searchInput: '',
+        addItemToPlaylist(res.data.id, token, tempUri.join(',')).then(() => {
+          successToast(
+            'Playlist Created',
+            `We've created your ${valInput.title} playlist for you.`,
+            toast
+          );
+          setTracks([]);
+          setSelectedTracks([]);
+          setValInput({
+            title: '',
+            description: '',
+            searchInput: '',
+          });
         });
-        toast.success('Berhasil membuat playlist!', {
-          position: 'top-center',
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+      })
+      .catch((error) => {
+        const errMessage = error.response.data.error.message;
+        errorToast('Error!', errMessage, toast);
       });
-    });
   };
 
   const handleLogout = (e) => {
@@ -211,7 +213,7 @@ export const CreatePlaylist = () => {
         ) : (
           <Redirect to="/" />
         )}
-        <div className={selectedTracks.length > 0 && 'content-wrapper'}>
+        <div className={selectedTracks.length > 0 ? 'content-wrapper' : ''}>
           {selectedTracks.length > 0 && (
             <div>
               <FormPlaylist
@@ -220,7 +222,9 @@ export const CreatePlaylist = () => {
                 handleChange={handleChange}
                 handleSubmitPlaylist={handleSubmitPlaylist}
               />
-              <h1 style={{ margin: '1rem 0' }}>Selected tracks</h1>
+              <Text fontSize="3xl" fontWeight="bold" m="1.5rem 0">
+                Selected Tracks
+              </Text>
               <div
                 style={{
                   display: 'flex',
@@ -235,12 +239,14 @@ export const CreatePlaylist = () => {
 
           {tracks.length > 0 && (
             <div>
-              <h1 style={{ marginBottom: '1rem' }}>List of tracks</h1>
+              <Text fontSize="4xl" fontWeight="bold" mb="1.5rem">
+                List of Tracks
+              </Text>
               <div className="row">{renderRow()}</div>
             </div>
           )}
         </div>
-        <Toast />
+        {/* <Toast /> */}
       </div>
     </div>
   );

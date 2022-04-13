@@ -1,32 +1,31 @@
 import React from 'react';
 import './style.css';
+import { InputGroup, InputLeftElement, Input } from '@chakra-ui/react';
+import { SearchIcon } from '@chakra-ui/icons';
 
 const SearchBox = ({ handleChange, handleSubmit, searchInput }) => {
   return (
-    <div className="search-wrapper">
-      <button
+    <InputGroup size="lg" mt="4rem">
+      <InputLeftElement
+        pointerEvents="true"
         onClick={handleSubmit}
-        style={{
-          fontSize: '16px',
-          backgroundColor: '#252836',
-          outline: 'none',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          border: 'none',
-          marginRight: '.5rem',
-        }}
-      >
-        <img src="/icons/search.svg" />
-      </button>
-      <input
-        className="input-search"
+        children={
+          <button onClick={handleSubmit}>
+            <SearchIcon color="#6C5ECf" />
+          </button>
+        }
+      />
+      <Input
+        value={searchInput}
         onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
         name="searchInput"
-        value={searchInput}
+        type="text"
+        placeholder="Search your song..."
         onChange={handleChange}
-        placeholder="Masukkan track yang ingin anda cari"
+        backgroundColor="gray.800"
+        border="none"
       />
-    </div>
+    </InputGroup>
   );
 };
 

@@ -1,14 +1,10 @@
 import React from 'react';
+import { Text } from '@chakra-ui/react';
 
 export const SongArtist = ({ artist }) => {
   return (
-    <h2
-      style={{
-        fontSize: '10px',
-        opacity: '50%',
-      }}
-    >
+    <Text fontSize="xs" opacity="50%">
       {artist}
-    </h2>
+    </Text>
   );
 };

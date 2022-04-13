@@ -1,5 +1,10 @@
 import React from 'react';
+import { Text } from '@chakra-ui/react';
 
 export const SongTitle = ({ title }) => {
-  return <h1 style={{ fontSize: '18px' }}>{title}</h1>;
+  return (
+    <Text fontSize="lg" fontWeight="500">
+      {title}
+    </Text>
+  );
 };

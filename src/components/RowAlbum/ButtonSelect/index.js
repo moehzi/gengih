@@ -1,17 +1,17 @@
 import React from 'react';
-import './style.css';
+import { Button } from '@chakra-ui/react';
 
 export const ButtonSelect = ({ isSelected, onClick, id }) => {
   return (
-    <button
-      className="btn-select"
-      style={{
-        backgroundColor: isSelected ? 'gray' : '#6C5ECF',
-      }}
+    <Button
+      colorScheme={isSelected ? 'red' : 'purple'}
+      size="sm"
+      height="30px"
+      width="80px"
       onClick={onClick}
       id={id}
     >
       {isSelected ? 'Deselect' : 'Select'}
-    </button>
+    </Button>
   );
 };
