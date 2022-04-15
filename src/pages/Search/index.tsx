@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import SearchBox from '../../components/SearchBox/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { setText } from '../../store/searchSlice';
 import { getGiphy } from '../../services/gifService';
 import { CardGIF } from '../../components/CardGIF';
 import Navbar from '../../components/Navbar';
+import { RootState } from '../../store/store';
 
 const SearchBar = () => {
-  const searchQuery = useSelector((state) => state.inputValue.value);
+  const searchQuery = useSelector((state: RootState) => state.inputValue.value);
 
   const [giphys, setGiphys] = useState([]);
 
   const dispatch = useDispatch();
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+  ) => {
     dispatch(setText(e.target.value));
   };
 

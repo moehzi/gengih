@@ -4,7 +4,12 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
-export default function Gif({ url, title }) {
+interface GifProps {
+  url: string;
+  title: string;
+}
+
+export default function Gif({ url, title }: GifProps) {
   return (
     <Card
       sx={{

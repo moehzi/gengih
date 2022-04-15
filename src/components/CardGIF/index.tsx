@@ -1,8 +1,20 @@
-import React from 'react';
 import Gif from '../gif/Gif';
 import './style.css';
 
-export const CardGIF = ({ giphys }) => {
+interface AllGifs {
+  giphys: Gifs[];
+}
+
+interface Gifs {
+  title: string;
+  images: {
+    fixed_width: {
+      url: string;
+    };
+  };
+}
+
+export const CardGIF = ({ giphys }: AllGifs) => {
   const renderGif = () => {
     return giphys.map((giphy, index) => {
       return (
