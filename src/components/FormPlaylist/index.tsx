@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEventHandler } from 'react';
 
 import {
   Button,
@@ -9,12 +9,19 @@ import {
   Input,
 } from '@chakra-ui/react';
 
+interface FormPlaylistProps {
+  handleSubmitPlaylist: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleChange: ChangeEventHandler;
+  title: string;
+  description: string;
+}
+
 const FormPlaylist = ({
   handleSubmitPlaylist,
   handleChange,
   title,
   description,
-}) => {
+}: FormPlaylistProps) => {
   const isError = title === '';
   return (
     <form

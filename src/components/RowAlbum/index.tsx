@@ -4,17 +4,28 @@ import { SongArtist } from './SongArtist';
 import { SongImage } from './SongImage';
 import { SongTitle } from './SongTitle';
 
+interface RowAlbumProps {
+  title: string;
+  artist: string;
+  url: string;
+  image: string;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  width?: string;
+  height?: string;
+  isSelected: boolean;
+  id: string;
+}
+
 const RowAlbum = ({
   image,
   title,
   artist,
-  url,
   onClick,
   isSelected,
   id,
   width,
   height,
-}) => {
+}: Partial<RowAlbumProps>) => {
   return (
     <div
       style={{
@@ -36,12 +47,7 @@ const RowAlbum = ({
       >
         <SongTitle title={title} />
         <SongArtist artist={artist} />
-        <ButtonSelect
-          url={url}
-          onClick={onClick}
-          isSelected={isSelected}
-          id={id}
-        />
+        <ButtonSelect onClick={onClick} isSelected={isSelected} id={id} />
       </div>
     </div>
   );

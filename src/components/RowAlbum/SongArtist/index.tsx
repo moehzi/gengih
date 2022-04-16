@@ -1,7 +1,10 @@
 import React from 'react';
 import { Text } from '@chakra-ui/react';
 
-export const SongArtist = ({ artist }) => {
+interface SongArtistProps {
+  artist: string;
+}
+export const SongArtist = ({ artist }: Partial<SongArtistProps>) => {
   return (
     <Text fontSize="xs" opacity="50%">
       {artist}

@@ -1,7 +1,11 @@
 import React from 'react';
 import { Text } from '@chakra-ui/react';
 
-export const SongTitle = ({ title }) => {
+interface SongTitleProps {
+  title: string;
+}
+
+export const SongTitle = ({ title }: Partial<SongTitleProps>) => {
   return (
     <Text fontSize="lg" fontWeight="500">
       {title}

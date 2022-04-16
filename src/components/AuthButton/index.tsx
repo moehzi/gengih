@@ -1,13 +1,12 @@
-import React from 'react';
 import './style.css';
 
 const AuthButton = () => {
-  function randomString(length) {
-    var result = '';
-    var characters =
+  function randomString(length: number) {
+    let result = '';
+    const characters =
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()_+=-';
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
@@ -16,9 +15,9 @@ const AuthButton = () => {
   const SPOTIFY_AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${
     process.env.REACT_APP_SPOTIFY_CLIENT_ID
   }&redirect_uri=${encodeURIComponent(
-    process.env.REACT_APP_SPOTIFY_REDIRECT_URI
+    process.env.REACT_APP_SPOTIFY_REDIRECT_URI || ''
   )}&scope=${encodeURIComponent(
-    process.env.REACT_APP_SPOTIFY_SCOPES
+    process.env.REACT_APP_SPOTIFY_SCOPES || ''
   )}&response_type=token&state=${randomString(16)}&show_dialog=true`;
 
   return (

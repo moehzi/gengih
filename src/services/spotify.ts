@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getCurrentProfile = async (token) => {
+export const getCurrentProfile = async (token: string) => {
   const res = await axios.get('https://api.spotify.com/v1/me', {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -9,7 +9,17 @@ export const getCurrentProfile = async (token) => {
   return res.data;
 };
 
-export const createPlaylist = async (user, token, payload) => {
+type createPayload = {
+  name: string;
+  description: string;
+  public: boolean;
+};
+
+export const createPlaylist = async (
+  user: string,
+  token: string,
+  payload: createPayload
+) => {
   return await axios.post(
     `https://api.spotify.com/v1/users/${user}/playlists`,
     payload,
@@ -21,7 +31,11 @@ export const createPlaylist = async (user, token, payload) => {
   );
 };
 
-export const addItemToPlaylist = async (playlistId, token, uris) => {
+export const addItemToPlaylist = async (
+  playlistId: number,
+  token: string,
+  uris: string
+) => {
   return await axios.post(
     `https://api.spotify.com/v1/playlists/${playlistId}/tracks?uris=${encodeURIComponent(
       uris
@@ -35,7 +49,7 @@ export const addItemToPlaylist = async (playlistId, token, uris) => {
   );
 };
 
-export const getSongList = async (token, valInput) => {
+export const getSongList = async (token: string, valInput: string) => {
   const response = await axios.get(
     `https://api.spotify.com/v1/search?q=${valInput}&limit=30&type=track`,
     {

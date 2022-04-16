@@ -3,12 +3,30 @@ import './style.css';
 import { InputGroup, InputLeftElement, Input } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 
-const SearchBox = ({ handleChange, handleSubmit, searchInput }) => {
+interface SearchBoxProps {
+  handleChange: React.ChangeEventHandler<HTMLInputElement>;
+  handleSubmit: React.MouseEventHandler<HTMLButtonElement>;
+  handleSubmitIcon: React.MouseEventHandler;
+  searchInput: string;
+}
+
+const SearchBox = ({
+  handleChange,
+  handleSubmit,
+  searchInput,
+  handleSubmitIcon,
+}: SearchBoxProps) => {
+  const keyDownhandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === 'Enter') {
+      handleSubmit(e as any);
+    }
+  };
+
   return (
     <InputGroup size="lg" mt="4rem">
       <InputLeftElement
-        pointerEvents="true"
-        onClick={handleSubmit}
+        onClick={handleSubmitIcon}
+        // eslint-disable-next-line react/no-children-prop
         children={
           <button onClick={handleSubmit}>
             <SearchIcon color="#6C5ECf" />
@@ -17,7 +35,7 @@ const SearchBox = ({ handleChange, handleSubmit, searchInput }) => {
       />
       <Input
         value={searchInput}
-        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+        onKeyDown={keyDownhandler}
         name="searchInput"
         type="text"
         placeholder="Search your song..."

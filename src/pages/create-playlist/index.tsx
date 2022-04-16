@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RowAlbum from '../../components/RowAlbum';
 import AuthView from '../../components/AuthView';
 import {
@@ -10,45 +10,90 @@ import {
 import FormPlaylist from '../../components/FormPlaylist';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../store/authSlice';
-import { Redirect } from 'react-router-dom';
-import { errorToast, successToast } from '../../helper/toast';
 import './style.css';
-import { Text, useToast } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
+import { Redirect } from 'react-router';
+import { RootState } from '../../store/store';
+import { useToast } from '@chakra-ui/react';
+
+interface Track {
+  id: string;
+  uri: string;
+  isSelected: boolean;
+  album: {
+    images: imagesTrack[];
+  };
+  name: string;
+  artists: artistTrack[];
+}
+
+interface imagesTrack {
+  height: number;
+  url: string;
+  width: number;
+}
+
+export interface artistTrack {
+  id: string;
+  name: string;
+  uri: string;
+}
+
+interface User {
+  id: string;
+  display_name: string;
+}
+
+interface SelectedTrack {
+  id: string;
+  uri: string;
+  isSelected: boolean;
+  album: {
+    images: imagesTrack[];
+  };
+  name: string;
+  artists: artistTrack[];
+}
 
 export const CreatePlaylist = () => {
   const toast = useToast();
   const dispatch = useDispatch();
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState<User>();
   const [valInput, setValInput] = useState({
     title: '',
     description: '',
     searchInput: '',
   });
-  const [tracks, setTracks] = useState([]);
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [isUpdated, setIsUpdated] = useState(false);
-  const [selectedTracks, setSelectedTracks] = useState([]);
-  const token = useSelector((state) => state.token?.value);
+  const [selectedTracks, setSelectedTracks] = useState<SelectedTrack[]>([]);
+  const token = useSelector((state: RootState) => state.token?.value);
 
-  const handleClick = (e) => {
-    const findIndex = tracks.findIndex((track) => track.uri === e.target.id);
+  const handleClick = (event: React.MouseEvent, datas: Track[]) => {
+    const findIndex = datas.findIndex(
+      (track) => track.uri === (event.target as Element).id
+    );
 
-    const removeItem = (arr, value) => {
-      return arr.filter((ele) => {
+    const removeItem = (arr: SelectedTrack[], value: SelectedTrack) => {
+      return arr.filter((ele: SelectedTrack) => {
         return ele !== value;
       });
     };
 
     const removeTemp = removeItem(selectedTracks, tracks[findIndex]);
-    tracks[findIndex].isSelected === false
-      ? ((tracks[findIndex].isSelected = true),
-        selectedTracks.push(tracks[findIndex]))
-      : ((tracks[findIndex].isSelected = false),
-        setSelectedTracks([...removeTemp]));
-
     setIsUpdated(true);
+    return datas[findIndex]['isSelected'] === false
+      ? ((datas[findIndex]['isSelected'] = true),
+        selectedTracks.push(tracks[findIndex]))
+      : ((datas[findIndex]['isSelected'] = false),
+        setSelectedTracks([...removeTemp]));
   };
 
-  const handleSubmitPlaylist = (e) => {
+  const handleSubmitPlaylist = (
+    e: React.FormEvent<HTMLFormElement>,
+    datas: SelectedTrack[],
+    user: User
+  ) => {
     e.preventDefault();
 
     const payload = {
@@ -56,19 +101,21 @@ export const CreatePlaylist = () => {
       description: valInput.description,
       public: false,
     };
-
-    createPlaylist(user.id, token, payload)
+    createPlaylist(user?.id, token, payload)
       .then((res) => {
         setValInput({ ...valInput, title: ' ', description: ' ' });
 
-        const tempUri = selectedTracks.map((track) => track.uri);
+        const tempUri = datas.map((track) => track.uri);
+        console.log(tempUri.join(','));
 
         addItemToPlaylist(res.data.id, token, tempUri.join(',')).then(() => {
-          successToast(
-            'Playlist Created',
-            `We've created your ${valInput.title} playlist for you.`,
-            toast
-          );
+          toast({
+            title: 'Playlist Created',
+            description: `We've created your ${valInput.title} playlist for you.`,
+            status: 'success',
+            duration: 9000,
+            isClosable: true,
+          });
           setTracks([]);
           setSelectedTracks([]);
           setValInput({
@@ -80,27 +127,33 @@ export const CreatePlaylist = () => {
       })
       .catch((error) => {
         const errMessage = error.response.data.error.message;
-        errorToast('Error!', errMessage, toast);
+        toast({
+          title: 'Error!',
+          description: errMessage,
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
       });
   };
 
-  const handleLogout = (e) => {
+  const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
     dispatch(setToken(''));
   };
 
-  const handleClickSelected = (e) => {
-    const findIndex = selectedTracks.findIndex(
-      (track) => track.uri === e.target.id
+  const handleClickSelected = (e: React.MouseEvent, datas: SelectedTrack[]) => {
+    const findIndex = datas.findIndex(
+      (track) => track.uri === (e.target as Element).id
     );
 
-    const removeItem = (arr, value) => {
-      return arr.filter((ele) => {
+    const removeItem = (arr: SelectedTrack[], value: SelectedTrack) => {
+      return arr.filter((ele: SelectedTrack) => {
         return ele !== value;
       });
     };
 
-    selectedTracks[findIndex].isSelected = false;
+    datas[findIndex]['isSelected'] = false;
     const removeSelected = removeItem(
       selectedTracks,
       selectedTracks[findIndex]
@@ -109,15 +162,13 @@ export const CreatePlaylist = () => {
     setSelectedTracks([...removeSelected]);
   };
 
-  const renderRow = () => {
-    return tracks
-      .filter(
-        (track) => !selectedTracks.some((track2) => track.uri === track2.uri)
-      )
+  const renderRow = (datas: Track[], selected: SelectedTrack[]) => {
+    return datas
+      .filter((track) => !selected.some((track2) => track.uri === track2.uri))
       .map((album) => {
         return (
           <RowAlbum
-            onClick={handleClick}
+            onClick={(e: React.MouseEvent) => handleClick(e, tracks)}
             isSelected={album.isSelected}
             image={album.album.images[1].url}
             title={album.name}
@@ -130,13 +181,15 @@ export const CreatePlaylist = () => {
       });
   };
 
-  const renderSelectedRow = () => {
-    return selectedTracks.map((album) => {
+  const renderSelectedRow = (datas: SelectedTrack[]) => {
+    return datas.map((album) => {
       return (
         <RowAlbum
           width="100px"
           height="100px"
-          onClick={handleClickSelected}
+          onClick={(e: React.MouseEvent) =>
+            handleClickSelected(e, selectedTracks)
+          }
           isSelected={album.isSelected}
           image={album.album.images[1].url}
           title={album.name}
@@ -155,10 +208,10 @@ export const CreatePlaylist = () => {
         setUser(res);
       });
     }
-  }, []);
+  }, [token]);
 
   useEffect(() => {
-    renderRow();
+    renderRow(tracks, selectedTracks);
     setIsUpdated(false);
   }, [isUpdated]);
 
@@ -167,7 +220,7 @@ export const CreatePlaylist = () => {
       .then((res) => {
         const data = res.tracks.items;
 
-        const newArr = data.map((v) => {
+        const newArr = data.map((v: string[]) => {
           return { ...v, isSelected: false };
         });
         setTracks(newArr);
@@ -175,12 +228,12 @@ export const CreatePlaylist = () => {
       .catch((error) => console.log(error));
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
+  const handleChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
     setValInput({
       ...valInput,
-      [name]: value,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -204,7 +257,7 @@ export const CreatePlaylist = () => {
       >
         {token ? (
           <AuthView
-            user={user.display_name}
+            user={user?.display_name}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             handleLogout={handleLogout}
@@ -220,7 +273,9 @@ export const CreatePlaylist = () => {
                 title={valInput.title}
                 description={valInput.description}
                 handleChange={handleChange}
-                handleSubmitPlaylist={handleSubmitPlaylist}
+                handleSubmitPlaylist={(e: React.FormEvent<HTMLFormElement>) =>
+                  handleSubmitPlaylist(e, selectedTracks, user!)
+                }
               />
               <Text fontSize="3xl" fontWeight="bold" m="1.5rem 0">
                 Selected Tracks
@@ -232,7 +287,7 @@ export const CreatePlaylist = () => {
                   gap: '1rem',
                 }}
               >
-                {renderSelectedRow()}
+                {renderSelectedRow(selectedTracks)}
               </div>
             </div>
           )}
@@ -242,7 +297,7 @@ export const CreatePlaylist = () => {
               <Text fontSize="4xl" fontWeight="bold" mb="1.5rem">
                 List of Tracks
               </Text>
-              <div className="row">{renderRow()}</div>
+              <div className="row">{renderRow(tracks, selectedTracks)}</div>
             </div>
           )}
         </div>

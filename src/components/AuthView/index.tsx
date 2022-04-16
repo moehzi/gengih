@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { ChangeEventHandler, MouseEventHandler } from 'react';
 import SearchBox from '../SearchBox';
 import { Text, Button } from '@chakra-ui/react';
 import './style.css';
+
+interface AuthViewProps {
+  user?: string;
+  searchInput: string;
+  handleChange: ChangeEventHandler;
+  handleSubmit: MouseEventHandler<HTMLButtonElement>;
+  handleLogout: MouseEventHandler<HTMLButtonElement>;
+}
 
 const AuthView = ({
   handleChange,
@@ -9,7 +17,7 @@ const AuthView = ({
   handleLogout,
   user,
   searchInput,
-}) => {
+}: AuthViewProps) => {
   return (
     <div>
       <div className="search-container">
@@ -29,6 +37,7 @@ const AuthView = ({
 
       <SearchBox
         handleChange={handleChange}
+        handleSubmitIcon={handleSubmit}
         handleSubmit={handleSubmit}
         searchInput={searchInput}
       />

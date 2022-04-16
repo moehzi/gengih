@@ -1,6 +1,16 @@
 import React from 'react';
 
-export const SongImage = ({ image, width, height }) => {
+interface SongImageProps {
+  image: string;
+  width?: string;
+  height?: string;
+}
+
+export const SongImage = ({
+  image,
+  width,
+  height,
+}: Partial<SongImageProps>) => {
   return (
     <img
       src={image}
