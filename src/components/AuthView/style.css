@@ -1,0 +1,30 @@
+.btn-logout {
+	padding: 0.75rem 2rem;
+	border-radius: 0.5rem;
+	font-size: 20px;
+	font-weight: 600;
+	outline: none;
+	cursor: pointer;
+	border: none;
+	color: white;
+	background-color: #6C5ECF;
+}
+
+.btn-logout:hover {
+	opacity: 90%;
+}
+
+.search-container {
+	display: flex;
+	align-items: center;
+}
+
+@media only screen and (max-width: 560px) {
+	.search-container {
+		flex-direction: column;
+	}
+
+	.search-container button {
+		margin-top: 1rem;
+	}
+}
