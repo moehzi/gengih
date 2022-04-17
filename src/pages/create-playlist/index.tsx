@@ -15,45 +15,8 @@ import { Text } from '@chakra-ui/react';
 import { Redirect } from 'react-router';
 import { RootState } from '../../store/store';
 import { useToast } from '@chakra-ui/react';
-
-interface Track {
-  id: string;
-  uri: string;
-  isSelected: boolean;
-  album: {
-    images: imagesTrack[];
-  };
-  name: string;
-  artists: artistTrack[];
-}
-
-interface imagesTrack {
-  height: number;
-  url: string;
-  width: number;
-}
-
-export interface artistTrack {
-  id: string;
-  name: string;
-  uri: string;
-}
-
-interface User {
-  id: string;
-  display_name: string;
-}
-
-interface SelectedTrack {
-  id: string;
-  uri: string;
-  isSelected: boolean;
-  album: {
-    images: imagesTrack[];
-  };
-  name: string;
-  artists: artistTrack[];
-}
+import { User } from '../../interfaces/UserData';
+import { Track, SelectedTrack } from '../../interfaces/TrackData';
 
 export const CreatePlaylist = () => {
   const toast = useToast();
@@ -301,7 +264,6 @@ export const CreatePlaylist = () => {
             </div>
           )}
         </div>
-        {/* <Toast /> */}
       </div>
     </div>
   );
