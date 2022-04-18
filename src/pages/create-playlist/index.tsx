@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import RowAlbum from '../../components/RowAlbum';
-import AuthView from '../../components/AuthView';
 import {
   addItemToPlaylist,
   createPlaylist,
@@ -17,11 +16,12 @@ import { RootState } from '../../store/store';
 import { useToast } from '@chakra-ui/react';
 import { User } from '../../interfaces/UserData';
 import { Track, SelectedTrack } from '../../interfaces/TrackData';
+import Header from '../../components/Header/index';
+import Navbar from '../../components/Navbar';
+import { removeItem } from '../../utils/removeFunction';
 
 export const CreatePlaylist = () => {
   const toast = useToast();
-  const dispatch = useDispatch();
-  const [user, setUser] = useState<User>();
   const [valInput, setValInput] = useState({
     title: '',
     description: '',
@@ -31,17 +31,12 @@ export const CreatePlaylist = () => {
   const [isUpdated, setIsUpdated] = useState(false);
   const [selectedTracks, setSelectedTracks] = useState<SelectedTrack[]>([]);
   const token = useSelector((state: RootState) => state.token?.value);
+  const user = useSelector((state: RootState) => state.user?.value);
 
   const handleClick = (event: React.MouseEvent, datas: Track[]) => {
     const findIndex = datas.findIndex(
       (track) => track.uri === (event.target as Element).id
     );
-
-    const removeItem = (arr: SelectedTrack[], value: SelectedTrack) => {
-      return arr.filter((ele: SelectedTrack) => {
-        return ele !== value;
-      });
-    };
 
     const removeTemp = removeItem(selectedTracks, tracks[findIndex]);
     setIsUpdated(true);
@@ -100,21 +95,10 @@ export const CreatePlaylist = () => {
       });
   };
 
-  const handleLogout = (e: React.MouseEvent) => {
-    e.preventDefault();
-    dispatch(setToken(''));
-  };
-
   const handleClickSelected = (e: React.MouseEvent, datas: SelectedTrack[]) => {
     const findIndex = datas.findIndex(
       (track) => track.uri === (e.target as Element).id
     );
-
-    const removeItem = (arr: SelectedTrack[], value: SelectedTrack) => {
-      return arr.filter((ele: SelectedTrack) => {
-        return ele !== value;
-      });
-    };
 
     datas[findIndex]['isSelected'] = false;
     const removeSelected = removeItem(
@@ -166,14 +150,6 @@ export const CreatePlaylist = () => {
   };
 
   useEffect(() => {
-    if (token) {
-      getCurrentProfile(token).then((res) => {
-        setUser(res);
-      });
-    }
-  }, [token]);
-
-  useEffect(() => {
     renderRow(tracks, selectedTracks);
     setIsUpdated(false);
   }, [isUpdated]);
@@ -209,62 +185,64 @@ export const CreatePlaylist = () => {
         padding: '4rem 0',
       }}
     >
-      <div
-        style={{
-          width: '90%',
-          margin: '0 auto',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '2rem',
-        }}
-      >
-        {token ? (
-          <AuthView
+      {token ? (
+        <div
+          style={{
+            width: '90%',
+            margin: '0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2rem',
+          }}
+        >
+          {user && <Navbar />}
+
+          <Header
             user={user?.display_name}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
-            handleLogout={handleLogout}
             searchInput={valInput.searchInput}
           />
-        ) : (
-          <Redirect to="/" />
-        )}
-        <div className={selectedTracks.length > 0 ? 'content-wrapper' : ''}>
-          {selectedTracks.length > 0 && (
-            <div>
-              <FormPlaylist
-                title={valInput.title}
-                description={valInput.description}
-                handleChange={handleChange}
-                handleSubmitPlaylist={(e: React.FormEvent<HTMLFormElement>) =>
-                  handleSubmitPlaylist(e, selectedTracks, user!)
-                }
-              />
-              <Text fontSize="3xl" fontWeight="bold" m="1.5rem 0">
-                Selected Tracks
-              </Text>
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem',
-                }}
-              >
-                {renderSelectedRow(selectedTracks)}
-              </div>
-            </div>
-          )}
 
-          {tracks.length > 0 && (
-            <div>
-              <Text fontSize="4xl" fontWeight="bold" mb="1.5rem">
-                List of Tracks
-              </Text>
-              <div className="row">{renderRow(tracks, selectedTracks)}</div>
-            </div>
-          )}
+          <div className={selectedTracks.length > 0 ? 'content-wrapper' : ''}>
+            {selectedTracks.length > 0 && (
+              <div>
+                <FormPlaylist
+                  title={valInput.title}
+                  description={valInput.description}
+                  handleChange={handleChange}
+                  handleSubmitPlaylist={(e: React.FormEvent<HTMLFormElement>) =>
+                    handleSubmitPlaylist(e, selectedTracks, user!)
+                  }
+                />
+                <Text fontSize="3xl" fontWeight="bold" m="1.5rem 0">
+                  Selected Tracks
+                </Text>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1rem',
+                  }}
+                >
+                  {renderSelectedRow(selectedTracks)}
+                </div>
+              </div>
+            )}
+
+            {tracks.length > 0 && (
+              <div>
+                <Text fontSize="4xl" fontWeight="bold" mb="1.5rem">
+                  List of Tracks
+                </Text>
+                <div className="row">{renderRow(tracks, selectedTracks)}</div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <Redirect to="/" />
+      )}
     </div>
   );
 };
