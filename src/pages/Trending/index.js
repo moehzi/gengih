@@ -23,7 +23,6 @@ const Trending = () => {
         minHeight: '100vh',
       }}
     >
-      <Navbar />
       <Typography sx={{ color: 'white' }} variant="h3">
         On trending now!
       </Typography>
