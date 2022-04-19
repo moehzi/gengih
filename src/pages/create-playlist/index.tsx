@@ -3,17 +3,14 @@ import RowAlbum from '../../components/RowAlbum';
 import {
   addItemToPlaylist,
   createPlaylist,
-  getCurrentProfile,
   getSongList,
 } from '../../services/spotify';
 import FormPlaylist from '../../components/FormPlaylist';
-import { useDispatch, useSelector } from 'react-redux';
-import { setToken } from '../../store/authSlice';
+import { useSelector } from 'react-redux';
 import './style.css';
-import { Text } from '@chakra-ui/react';
+import { Text, useToast } from '@chakra-ui/react';
 import { Redirect } from 'react-router';
 import { RootState } from '../../store/store';
-import { useToast } from '@chakra-ui/react';
 import { User } from '../../interfaces/UserData';
 import { Track, SelectedTrack } from '../../interfaces/TrackData';
 import Header from '../../components/Header/index';
@@ -113,6 +110,7 @@ export const CreatePlaylist = () => {
     return datas
       .filter((track) => !selected.some((track2) => track.uri === track2.uri))
       .map((album) => {
+        console.log(album);
         return (
           <RowAlbum
             onClick={(e: React.MouseEvent) => handleClick(e, tracks)}
@@ -120,7 +118,6 @@ export const CreatePlaylist = () => {
             image={album.album.images[1].url}
             title={album.name}
             artist={album.artists[0].name}
-            url={album.artists[0].uri}
             key={album.id}
             id={album.uri}
           />
@@ -141,7 +138,6 @@ export const CreatePlaylist = () => {
           image={album.album.images[1].url}
           title={album.name}
           artist={album.artists[0].name}
-          url={album.artists[0].uri}
           key={album.id}
           id={album.uri}
         />
@@ -158,7 +154,8 @@ export const CreatePlaylist = () => {
     getSongList(token, valInput.searchInput)
       .then((res) => {
         const data = res.tracks.items;
-
+        console.log(res);
+        console.log(res.tracks.items);
         const newArr = data.map((v: string[]) => {
           return { ...v, isSelected: false };
         });

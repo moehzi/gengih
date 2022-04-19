@@ -34,6 +34,7 @@ const SearchBox = ({
         }
       />
       <Input
+        aria-label="track"
         value={searchInput}
         onKeyDown={keyDownhandler}
         name="searchInput"
