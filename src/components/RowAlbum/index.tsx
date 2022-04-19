@@ -7,7 +7,6 @@ import { SongTitle } from './SongTitle';
 interface RowAlbumProps {
   title: string;
   artist: string;
-  url: string;
   image: string;
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
   width?: string;
@@ -35,7 +34,7 @@ const RowAlbum = ({
         borderRadius: '.75rem',
       }}
     >
-      <SongImage image={image} width={width} height={height} />
+      <SongImage image={image} width={width} height={height} title={title} />
       <div
         style={{
           color: 'white',
