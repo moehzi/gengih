@@ -178,8 +178,6 @@ export const CreatePlaylist = () => {
       style={{
         backgroundColor: '#060606',
         color: 'white',
-        minHeight: '100vh',
-        padding: '4rem 0',
       }}
     >
       {token ? (
@@ -192,8 +190,6 @@ export const CreatePlaylist = () => {
             gap: '2rem',
           }}
         >
-          {user && <Navbar />}
-
           <Header
             user={user?.display_name}
             handleChange={handleChange}

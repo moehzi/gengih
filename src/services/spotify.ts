@@ -60,3 +60,15 @@ export const getSongList = async (token: string, valInput: string) => {
   );
   return response.data;
 };
+
+export const getMyPlaylist = async (token: string) => {
+  const response = await axios.get(
+    `https://api.spotify.com/v1/me/playlists?limit=30`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};

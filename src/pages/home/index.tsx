@@ -41,7 +41,6 @@ export const Homepage = () => {
           opacity: '35%',
           width: '100%',
           zIndex: '50',
-          minHeight: '100vh',
           position: 'absolute',
         }}
       />
