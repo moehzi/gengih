@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  Flex,
-  Circle,
-  Box,
-  Image,
-  Badge,
-  useColorModeValue,
-  Icon,
-  chakra,
-  Tooltip,
-} from '@chakra-ui/react';
+import { Box, Flex, Image } from '@chakra-ui/react';
 
 interface CardPlaylistProps {
   image: string;

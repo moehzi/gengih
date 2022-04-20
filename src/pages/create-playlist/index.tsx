@@ -14,7 +14,6 @@ import { RootState } from '../../store/store';
 import { User } from '../../interfaces/UserData';
 import { Track, SelectedTrack } from '../../interfaces/TrackData';
 import Header from '../../components/Header/index';
-import Navbar from '../../components/Navbar';
 import { removeItem } from '../../utils/removeFunction';
 
 export const CreatePlaylist = () => {
