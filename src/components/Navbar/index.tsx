@@ -14,7 +14,6 @@ import {
   HStack,
   Text,
   IconButton,
-  Fade,
 } from '@chakra-ui/react';
 import { TriangleDownIcon, CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import { NavLink } from 'react-router-dom';

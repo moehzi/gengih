@@ -1,5 +1,4 @@
 import { rest } from 'msw';
-import { useSelector } from 'react-redux';
 
 export const handlers = [
   rest.get(`https://api.spotify.com/v1/search`, (res, ctx) => {

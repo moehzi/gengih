@@ -1,12 +1,7 @@
 import './App.css';
 import { CreatePlaylist } from './pages/create-playlist';
 import { Homepage } from './pages/home';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useLocation,
-} from 'react-router-dom';
+import { Switch, Route, useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { YourPlaylist } from './pages/your-playlist';
 import Navbar from './components/Navbar';
