@@ -6,8 +6,7 @@ import { getMyPlaylist } from '../../services/spotify';
 import { CardPlaylist } from '../../components/CardPlaylist';
 import { Playlist } from '../../interfaces/PlaylistData';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
-import 'moment/locale/id';
+import { Box } from '@chakra-ui/react';
 
 export const YourPlaylist = () => {
   const token = useSelector((state: RootState) => state.token?.value);
@@ -53,19 +52,21 @@ export const YourPlaylist = () => {
             style={{
               fontSize: '2rem',
               marginBottom: '2rem',
+              fontWeight: '600',
             }}
           >
             List of your playlists
           </h1>
-          <div
+          <Box
             style={{
               display: 'flex',
               flexWrap: 'wrap',
               gap: '1.5rem',
             }}
+            justifyContent={'center'}
           >
             {renderCardPlaylist(playlist)}
-          </div>
+          </Box>
         </div>
       ) : (
         <Redirect to="/" />
