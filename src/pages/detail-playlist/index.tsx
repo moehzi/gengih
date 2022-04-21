@@ -6,7 +6,7 @@ import { RootState } from '../../store/store';
 import { Playlist } from '../../interfaces/PlaylistData';
 import { TabelContainer } from '../../components/TabelContainer';
 import { ListTrack } from '../../components/ListTrack';
-import { Tbody } from '@chakra-ui/react';
+import { Tbody, Heading, Box } from '@chakra-ui/react';
 import moment from 'moment';
 
 type PlaylistParams = {
@@ -31,13 +31,19 @@ export const DetailPlaylist = () => {
 
   const renderPlaylistById = (datas: Playlist) => {
     return (
-      <div
+      <Box
         key={datas.id}
-        style={{ display: 'flex', color: 'white', gap: '1.5rem' }}
+        display="flex"
+        flexDirection={{ base: 'column', sm: 'row' }}
+        gap="1.5rem"
+        color="white"
+        mb="2rem"
       >
         <img src={datas.images[0]?.url} width={250} height={250} />
         <div>
-          <h1 style={{ fontSize: '4rem', fontWeight: '500' }}>{datas.name}</h1>
+          <Heading as="h1" size="3xl">
+            {datas.name}
+          </Heading>
           <h5 style={{ opacity: '70%', fontSize: '1.25rem' }}>
             {datas.description}
           </h5>
@@ -64,7 +70,7 @@ export const DetailPlaylist = () => {
             </h5>
           </div>
         </div>
-      </div>
+      </Box>
     );
   };
 

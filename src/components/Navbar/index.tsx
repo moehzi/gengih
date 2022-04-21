@@ -8,29 +8,23 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  useDisclosure,
-  Stack,
   Center,
+  Stack,
   HStack,
   Text,
-  IconButton,
 } from '@chakra-ui/react';
-import { TriangleDownIcon, CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { NavLink, useParams } from 'react-router-dom';
+import { TriangleDownIcon } from '@chakra-ui/icons';
+import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../store/authSlice';
 import { setUser } from '../../store/userSlice';
 import { RootState } from '../../store/store';
 import { useEffect, useState } from 'react';
 import { getCurrentProfile } from '../../services/spotify';
-
-type PlaylistParams = {
-  id: string;
-};
+import { Link } from 'react-router-dom';
 
 export default function Nav() {
   const dispatch = useDispatch();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setIsLoading] = useState(true);
   const token = useSelector((state: RootState) => state.token?.value);
   const user = useSelector((state: RootState) => state.user?.value);
@@ -49,8 +43,6 @@ export default function Nav() {
     }
   }, []);
 
-  const { id } = useParams<PlaylistParams>();
-
   return (
     <Box bg={'#060606'} width="90%" margin="0 auto" mb="4rem">
       {!isLoading && (
@@ -58,13 +50,6 @@ export default function Nav() {
           <Box fontSize={'2rem'} fontWeight={'bold'} color="white">
             Mozaic
           </Box>
-          <IconButton
-            size={'md'}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={'Open Menu'}
-            display={{ md: 'none' }}
-            onClick={isOpen ? onClose : onOpen}
-          />
           <HStack spacing={8} alignItems={'center'}>
             <HStack
               as={'nav'}
@@ -126,23 +111,30 @@ export default function Nav() {
                     </Center>
                     <br />
                     <MenuDivider />
-                    <MenuItem
-                      _hover={{
-                        background: '#060606',
-                      }}
-                      _focus={{
-                        background: '#060606',
-                      }}
-                    >
-                      Your Servers
-                    </MenuItem>
-                    <MenuItem
-                      _hover={{
-                        background: '#060606',
-                      }}
-                    >
-                      Account Settings
-                    </MenuItem>
+                    <Link to="/create-playlist">
+                      <MenuItem
+                        display={{ md: 'none' }}
+                        _hover={{
+                          background: '#060606',
+                        }}
+                        _focus={{
+                          background: '#060606',
+                        }}
+                      >
+                        Create Playlist
+                      </MenuItem>
+                    </Link>
+                    <Link to="/your-playlist">
+                      <MenuItem
+                        display={{ md: 'none' }}
+                        _hover={{
+                          background: '#060606',
+                        }}
+                      >
+                        Your Playlist
+                      </MenuItem>
+                    </Link>
+
                     <MenuItem
                       _hover={{
                         background: '#060606',

@@ -27,7 +27,6 @@ export const CardPlaylist = ({
         alt={`Picture of ${name}`}
         rounded="lg"
         objectFit="cover"
-        maxHeight="218px"
       />
 
       <Box>
