@@ -7,6 +7,7 @@ import { YourPlaylist } from './pages/your-playlist';
 import Navbar from './components/Navbar';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
+import { DetailPlaylist } from './pages/detail-playlist';
 
 interface LocationState {
   pathname: string;
@@ -33,6 +34,9 @@ function App() {
         </Route>
         <Route path="/your-playlist">
           <YourPlaylist />
+        </Route>
+        <Route exact path="/playlist/:id">
+          <DetailPlaylist />
         </Route>
       </Switch>
     </div>

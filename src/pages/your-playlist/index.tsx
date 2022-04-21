@@ -5,6 +5,9 @@ import { RootState } from '../../store/store';
 import { getMyPlaylist } from '../../services/spotify';
 import { CardPlaylist } from '../../components/CardPlaylist';
 import { Playlist } from '../../interfaces/PlaylistData';
+import { Link } from 'react-router-dom';
+import moment from 'moment';
+import 'moment/locale/id';
 
 export const YourPlaylist = () => {
   const token = useSelector((state: RootState) => state.token?.value);
@@ -20,12 +23,14 @@ export const YourPlaylist = () => {
   const renderCardPlaylist = (datas: Playlist[]) => {
     return datas.map((item) => {
       return (
-        <CardPlaylist
-          name={item.name}
-          key={item.uri}
-          description={item.description}
-          image={item.images[0]?.url}
-        />
+        <Link to={`/playlist/${item.id}`} key={item.uri}>
+          <CardPlaylist
+            name={item.name}
+            description={item.description}
+            image={item.images[0]?.url}
+            key={item.uri}
+          />
+        </Link>
       );
     });
   };
@@ -44,12 +49,19 @@ export const YourPlaylist = () => {
             margin: '0 auto',
           }}
         >
+          <h1
+            style={{
+              fontSize: '2rem',
+              marginBottom: '2rem',
+            }}
+          >
+            List of your playlists
+          </h1>
           <div
             style={{
               display: 'flex',
               flexWrap: 'wrap',
               gap: '1.5rem',
-              justifyContent: 'center',
             }}
           >
             {renderCardPlaylist(playlist)}

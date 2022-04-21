@@ -72,3 +72,15 @@ export const getMyPlaylist = async (token: string) => {
   );
   return response.data;
 };
+
+export const getPlaylistById = async (token: string, id: string) => {
+  const response = await axios.get(
+    `https://api.spotify.com/v1/playlists/${id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
