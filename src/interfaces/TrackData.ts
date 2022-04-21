@@ -4,9 +4,11 @@ export interface Track {
   isSelected: boolean;
   album: {
     images: imagesTrack[];
+    name?: string;
   };
   name: string;
   artists: artistTrack[];
+  duration_ms?: number;
 }
 export interface SelectedTrack {
   id: string;

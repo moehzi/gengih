@@ -16,13 +16,17 @@ import {
   IconButton,
 } from '@chakra-ui/react';
 import { TriangleDownIcon, CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setToken } from '../../store/authSlice';
 import { setUser } from '../../store/userSlice';
 import { RootState } from '../../store/store';
 import { useEffect, useState } from 'react';
 import { getCurrentProfile } from '../../services/spotify';
+
+type PlaylistParams = {
+  id: string;
+};
 
 export default function Nav() {
   const dispatch = useDispatch();
@@ -44,6 +48,8 @@ export default function Nav() {
       });
     }
   }, []);
+
+  const { id } = useParams<PlaylistParams>();
 
   return (
     <Box bg={'#060606'} width="90%" margin="0 auto" mb="4rem">
@@ -76,7 +82,7 @@ export default function Nav() {
                 Create Playlist
               </NavLink>
               <NavLink
-                to="/your-playlist"
+                to="/your-playlist/"
                 style={(isActive) => ({
                   opacity: isActive ? '100%' : '70%',
                 })}

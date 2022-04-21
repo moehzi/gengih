@@ -22,7 +22,13 @@ export const CardPlaylist = ({
       cursor="pointer"
       _hover={{ backgroundColor: '#292d3d' }}
     >
-      <Image src={image} alt={`Picture of ${name}`} rounded="lg" />
+      <Image
+        src={image || '/images/covers.png'}
+        alt={`Picture of ${name}`}
+        rounded="lg"
+        objectFit="cover"
+        maxHeight="218px"
+      />
 
       <Box>
         <Flex
