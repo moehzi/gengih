@@ -84,3 +84,11 @@ export const getPlaylistById = async (token: string, id: string) => {
   );
   return response.data;
 };
+
+export const getTopSongs = async (token: string) => {
+  return await axios.get(`https://api.spotify.com/v1/me/top/tracks`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
