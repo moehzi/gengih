@@ -19,6 +19,7 @@ export interface SelectedTrack {
   };
   name: string;
   artists: artistTrack[];
+  duration_ms?: number;
 }
 
 interface imagesTrack {

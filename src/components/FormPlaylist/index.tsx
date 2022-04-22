@@ -53,6 +53,7 @@ const FormPlaylist = ({
             backgroundColor="gray.800"
             type="text"
             name="title"
+            minLength={10}
             placeholder="Masukkan judul playlist"
             onChange={handleChange}
             value={title}

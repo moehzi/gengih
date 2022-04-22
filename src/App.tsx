@@ -31,7 +31,6 @@ function App() {
         .split('&')
         .find((elem) => elem.startsWith('access_token'))
         ?.split('=')[1] as string;
-
       localStorage.setItem('token', access_token);
       window.location.hash = '';
       dispatch(setToken(access_token));

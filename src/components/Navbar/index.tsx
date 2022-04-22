@@ -21,9 +21,10 @@ import { setUser } from '../../store/userSlice';
 import { RootState } from '../../store/store';
 import { useEffect, useState } from 'react';
 import { getCurrentProfile } from '../../services/spotify';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function Nav() {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const token = useSelector((state: RootState) => state.token?.value);
@@ -37,10 +38,15 @@ export default function Nav() {
 
   useEffect(() => {
     if (token) {
-      getCurrentProfile(token).then((res) => {
-        dispatch(setUser(res));
-        setIsLoading(false);
-      });
+      getCurrentProfile(token)
+        .then((res) => {
+          dispatch(setUser(res));
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          history.push('/');
+          console.log(err.message);
+        });
     }
   }, []);
 

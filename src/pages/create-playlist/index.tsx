@@ -4,6 +4,7 @@ import {
   addItemToPlaylist,
   createPlaylist,
   getSongList,
+  getTopSongs,
 } from '../../services/spotify';
 import FormPlaylist from '../../components/FormPlaylist';
 import { useSelector } from 'react-redux';
@@ -15,6 +16,7 @@ import { User } from '../../interfaces/UserData';
 import { Track, SelectedTrack } from '../../interfaces/TrackData';
 import Header from '../../components/Header/index';
 import { removeItem } from '../../utils/removeFunction';
+import { duration } from 'moment';
 
 interface HistoryType {
   push: string;
@@ -22,6 +24,7 @@ interface HistoryType {
 
 export const CreatePlaylist = () => {
   const history = useHistory<HistoryType>();
+  const [isLoading, setIsLoading] = useState(true);
   const toast = useToast();
   const [valInput, setValInput] = useState({
     title: '',
@@ -125,6 +128,7 @@ export const CreatePlaylist = () => {
             artist={album.artists[0].name}
             key={album.id}
             id={album.uri}
+            duration={album.duration_ms}
           />
         );
       });
@@ -145,10 +149,23 @@ export const CreatePlaylist = () => {
           artist={album.artists[0].name}
           key={album.id}
           id={album.uri}
+          duration={album.duration_ms}
         />
       );
     });
   };
+
+  useEffect(() => {
+    if (!valInput.searchInput || token) {
+      getTopSongs(token).then((res) => {
+        const data = res.data.items;
+        const newArr = data.map((v: string[]) => {
+          return { ...v, isSelected: false };
+        });
+        setTracks(newArr);
+      });
+    }
+  }, []);
 
   useEffect(() => {
     renderRow(tracks, selectedTracks);
@@ -159,8 +176,6 @@ export const CreatePlaylist = () => {
     getSongList(token, valInput.searchInput)
       .then((res) => {
         const data = res.tracks.items;
-        console.log(res);
-        console.log(res.tracks.items);
         const newArr = data.map((v: string[]) => {
           return { ...v, isSelected: false };
         });
