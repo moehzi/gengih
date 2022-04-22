@@ -31,6 +31,7 @@ export default function Nav() {
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
+    window.localStorage.clear();
     dispatch(setToken(''));
   };
 

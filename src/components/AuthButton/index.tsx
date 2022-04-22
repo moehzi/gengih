@@ -12,13 +12,16 @@ const AuthButton = () => {
     return result;
   }
 
+  const scope =
+    'playlist-modify-private user-read-private user-top-read playlist-read-private';
+
   const SPOTIFY_AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${
     process.env.REACT_APP_SPOTIFY_CLIENT_ID
   }&redirect_uri=${encodeURIComponent(
     process.env.REACT_APP_SPOTIFY_REDIRECT_URI || ''
-  )}&scope=${encodeURIComponent(
-    process.env.REACT_APP_SPOTIFY_SCOPES || ''
-  )}&response_type=token&state=${randomString(16)}&show_dialog=true`;
+  )}&scope=${scope}&response_type=token&state=${randomString(
+    16
+  )}&show_dialog=true`;
 
   return (
     <div>

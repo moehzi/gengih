@@ -9,14 +9,19 @@ import FormPlaylist from '../../components/FormPlaylist';
 import { useSelector } from 'react-redux';
 import './style.css';
 import { Text, useToast } from '@chakra-ui/react';
-import { Redirect } from 'react-router';
+import { Redirect, useHistory } from 'react-router';
 import { RootState } from '../../store/store';
 import { User } from '../../interfaces/UserData';
 import { Track, SelectedTrack } from '../../interfaces/TrackData';
 import Header from '../../components/Header/index';
 import { removeItem } from '../../utils/removeFunction';
 
+interface HistoryType {
+  push: string;
+}
+
 export const CreatePlaylist = () => {
+  const history = useHistory<HistoryType>();
   const toast = useToast();
   const [valInput, setValInput] = useState({
     title: '',
@@ -77,6 +82,7 @@ export const CreatePlaylist = () => {
             description: '',
             searchInput: '',
           });
+          history.push('/your-playlist');
         });
       })
       .catch((error) => {
