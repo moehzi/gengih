@@ -28,7 +28,7 @@ const SearchBox = ({
         onClick={handleSubmitIcon}
         // eslint-disable-next-line react/no-children-prop
         children={
-          <button onClick={handleSubmit}>
+          <button onClick={handleSubmit} data-testid="icon-search">
             <SearchIcon color="#6C5ECf" />
           </button>
         }
@@ -36,6 +36,7 @@ const SearchBox = ({
       <Input
         aria-label="track"
         value={searchInput}
+        data-testid="search-input"
         onKeyDown={keyDownhandler}
         name="searchInput"
         type="text"

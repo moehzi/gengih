@@ -32,6 +32,7 @@ const RowAlbum = ({
 }: Partial<RowAlbumProps>) => {
   return (
     <div
+      data-testid="track-card"
       style={{
         display: 'flex',
         alignItems: 'center',
