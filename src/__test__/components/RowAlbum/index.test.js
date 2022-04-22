@@ -1,12 +1,12 @@
 /* eslint-disable no-undef */
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from '../../../store/store';
 import RowAlbum from '../../../components/RowAlbum';
 import { data } from '../../../data/album';
-import { CreatePlaylist } from '../../../pages/create-playlist';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import SearchBox from '../../../components/SearchBox';
+import { BrowserRouter } from 'react-router-dom';
+import App from '../../../App';
+import userEvent from '@testing-library/user-event';
 
 describe('rendering track component', () => {
   test('should render track component ', () => {
@@ -22,33 +22,38 @@ describe('rendering track component', () => {
     expect(screen.getByText(data.name)).toBeInTheDocument();
     expect(screen.getByText(data.artists[0].name)).toBeInTheDocument();
   });
+
+  test('should fetch search api and display it ', async () => {
+    window.history.pushState(
+      {},
+      'Home',
+      `#access_token=ini_token&token_type=Bearer&expires_in=3600`
+    );
+
+    render(
+      <Provider store={store}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </Provider>
+    );
+
+    await waitFor(() => {
+      expect(window.location.pathname).toStrictEqual('/create-playlist');
+    });
+
+    const searchInput = screen.getByTestId('search-input');
+    const iconSearch = screen.getByTestId('icon-search');
+
+    await userEvent.type(searchInput, 'Mawar');
+    await userEvent.click(iconSearch);
+
+    setTimeout(async () => {
+      await waitFor(() => {
+        screen
+          .getAllByTestId('track-cards')
+          .forEach((el) => expect(el).toBeInTheDocument());
+      });
+    }, 0);
+  });
 });
-
-// still not work so confuse :(
-// describe('fetch', () => {
-//   const handleClick = jest.fn();
-//   const handleChange = jest.fn();
-//   const setup = () => {
-//     const utils = render(
-//       <SearchBox
-//         handleSubmitIcon={handleClick}
-//         handleSubmit={handleClick}
-//         handleChange={handleChange}
-//       />
-//     );
-//     const input = utils.getByLabelText('track');
-//     return {
-//       input,
-//       ...utils,
-//     };
-//   };
-
-//   test('fetch and display searchapi', async () => {
-//     const { input } = setup();
-//     const button = screen.getByRole('button');
-//     fireEvent.change(input, { target: { value: 'Mawar Jingga' } });
-//     fireEvent.click(button);
-//     const { findByText } = render();
-//     expect(await findByText('Mawar Jingga')).tobeInTheDocument();
-//   });
-// });
