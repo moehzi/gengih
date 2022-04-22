@@ -8,6 +8,9 @@ import Navbar from './components/Navbar';
 import { useSelector } from 'react-redux';
 import { RootState } from './store/store';
 import { DetailPlaylist } from './pages/detail-playlist';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { setToken } from './store/authSlice';
 
 interface LocationState {
   pathname: string;
@@ -16,6 +19,28 @@ interface LocationState {
 function App() {
   const user = useSelector((state: RootState) => state.user?.value);
   const location = useLocation<LocationState>();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    let access_token = localStorage.getItem('token');
+
+    if (!access_token && hash) {
+      access_token = hash
+        .substring(1)
+        .split('&')
+        .find((elem) => elem.startsWith('access_token'))
+        ?.split('=')[1] as string;
+
+      localStorage.setItem('token', access_token);
+      window.location.hash = '';
+      dispatch(setToken(access_token));
+    }
+
+    if (access_token) {
+      dispatch(setToken(localStorage.getItem('token')));
+    }
+  }, [dispatch]);
   return (
     <div
       style={{
